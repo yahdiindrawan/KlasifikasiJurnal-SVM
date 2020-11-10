@@ -1,13 +1,7 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[5]:
-
-
 import json
 
 # buka file JSON-nya dulu
-with open('hasil_jadi.json','r') as myfile:
+with open('hasil_preprocessing.json','r') as myfile:
     
 # load file JSON dari file yang sudah dibuka
     data = json.loads(myfile.read())
@@ -15,41 +9,13 @@ with open('hasil_jadi.json','r') as myfile:
 # cetak isi data 
 # print (data)
 
-
-# In[6]:
-
-
 hasil_preprocessing = []
 for i in range(len(data['hasil_preprocessing'])):
     hasil_preprocessing.append(data['hasil_preprocessing'][i][0])
 
 
-# In[7]:
-
-
-hasil_preprocessing
-
-
-# In[8]:
-
-
 text_final=[' '.join(sen) for sen in hasil_preprocessing] 
 # menghubungkan menjadi 1 kalimat 
-
-
-# In[9]:
-
-
-text_final = text_final
-
-
-# In[10]:
-
-
-text_final
-
-
-# In[28]:
 
 
 from sklearn.feature_extraction.text import TfidfTransformer, CountVectorizer
@@ -58,21 +24,12 @@ transformer = TfidfTransformer()
 TFIDF = transformer.fit_transform(vectorizer.fit_transform(text_final))
 
 
-# In[29]:
-
-
 print (TFIDF)
-
-
-# In[30]:
 
 
 #Save model TFIDF
 import pickle
 pickle.dump(vectorizer.vocabulary_,open("TFIDF.pkl","wb"))
-
-
-# In[31]:
 
 
 label=[]
@@ -97,17 +54,9 @@ for i in range(len(data['casefolding'])):
         nilai = 4
         label.append(nilai)
 
-
-# In[32]:
-
-
 print(len(label))
 print(len(text_final))
 print(label)
-
-
-# In[33]:
-
 
 from sklearn import svm #method untuk pross perhitungan klasifikasi
 from sklearn.feature_extraction.text import TfidfTransformer, CountVectorizer #method untuk menghitung vsm dan tfidf
@@ -122,14 +71,8 @@ from sklearn.metrics import confusion_matrix
 from sklearn.svm import SVC
 
 
-# In[34]:
-
 
 print(label)
-
-
-# In[153]:
-
 
 #METHOD MENGHITUNG RATA2 AKURASI#
 akurasi = []
@@ -222,95 +165,3 @@ avg_akurasiLinear()
 avg_akurasiSVM()
 avg_akurasiPolynomial()
 avg_akurasiRBF()
-
-
-# In[154]:
-
-
-data_uji = [data_uji[0] + data_uji[1] + data_uji[2] + data_uji[3] + data_uji[4]]
-prediksi_linear = [prediksi_linear[0] + prediksi_linear[1] + prediksi_linear[2] + prediksi_linear[3]+ prediksi_linear[4]]
-prediksi_svm = [prediksi_svm[0] + prediksi_svm[1] + prediksi_svm[2] + prediksi_svm[3] + prediksi_svm[4]] 
-prediksi_rbf = [prediksi_rbf[0] + prediksi_rbf[1] + prediksi_rbf[2] + prediksi_rbf[3] + prediksi_rbf[4]]
-label_uji = [label_uji[0] + label_uji[1] + label_uji[2] + label_uji[3] + label_uji[4]]                                                                                     
-
-
-# In[155]:
-
-
-print(data_uji[0])
-print(prediksi_linear[0])
-print(prediksi_svm[0])
-print(prediksi_rbf[0])
-print(label_uji[0])
-
-
-# In[156]:
-
-
-dataArray = {
-    'dataUji' : data_uji,
-    'prediksiLinear' :prediksi_linear,
-    'prediksiSVM' :prediksi_svm,
-    'prediksiRBF' :prediksi_rbf,
-    'labelUji' :label_uji
-}
-
-
-# In[159]:
-
-
-dataArray
-
-
-# In[160]:
-
-
-import json
-with open('hasil_prediksi.json', 'w') as json_file:
-  json.dump(dataArray, json_file)
-
-
-# In[164]:
-
-
-# gagal
-import csv
-# tentukan lokasi file, nama file, dan inisialisasi csv
-dataArray = {
-    'dataUji' : data_uji,
-    'prediksiLinear' :prediksi_linear,
-    'prediksiSVM' :prediksi_svm,
-    'prediksiRBF' :prediksi_rbf,
-    'labelUji' :label_uji
-}
-f = open('hasil prediksi.csv', 'w')
-w = csv.writer(f)
-w.writerow(('dataUji','prediksiLinear','prediksiSVM','prediksiRBF','labelUji'))
-
-# menulis file csv
-for a in dataArray:
-    w.writerow(a)
-
-# menutup file csv
-f.close()
-
-
-# In[88]:
-
-
-print(json['data'][0]['indeks'])
-
-
-# In[58]:
-
-
-for i in range(5):
-    for j in range(50):
-        print(simpan[i]['indeks'][j], ' ', simpan[i]['linear'][j], ' ', simpan[i]['svm'][j], ' ', simpan[i]['rbf'][j], ' ', simpan[i]['label'][j])
-
-
-# In[ ]:
-
-
-
-
